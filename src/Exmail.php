@@ -6,10 +6,11 @@
  * Time: 上午10:19
  */
 
-namespace Hanccc;
+namespace rayful;
 
 
 use GuzzleHttp\Client;
+use rayful\Request\Email;
 
 class Exmail
 {
@@ -160,13 +161,19 @@ class Exmail
         return $response;
     }
 
-    public function sync($data, $isArray = false)
+    /**
+     * 重要方法，同步成员信息，包括增、改、删操作
+     * @param Email $Request
+     * @return mixed
+     */
+    public function sync(Email $Request)
     {
-        array_push($data, ['access_token' => $this->token]);
+        $data = $Request->toArray();
+        $data['access_token'] = $this->token;
 
         $response = $this->sendRequest('POST', self::SYNC_URL, $data);
 
-        return json_decode($response, $isArray);
+        return json_decode($response);
     }
 
     /**
@@ -175,14 +182,14 @@ class Exmail
      * @param bool $isArray
      * @return mixed
      */
-    public function count($email, $isArray = false)
+    public function count($email)
     {
         $response = $this->sendRequest('POST', self::COUNT_URL, [
             'alias' => $email,
             'access_token' => $this->token
         ]);
 
-        return json_decode($response, $isArray);
+        return json_decode($response);
     }
 
     /**
@@ -191,16 +198,16 @@ class Exmail
      * @param bool $isArray
      * @return mixed
      */
-    public function check($emails, $isArray = false)
+    public function check($emails)
     {
         $url = self::CHECK_URL . '?' .'email=' . implode('&email=', $emails) . '&access_token=' . $this->token;
 
         $response = $this->client->get($url)->getBody()->getContents();
 
-        return json_decode($response, $isArray);
+        return json_decode($response);
     }
 
-    public function syncParty($action, $disPath, $srcPath = null, $isArray = false)
+    public function syncParty($action, $disPath, $srcPath = null)
     {
         $response = $this->sendRequest('POST', self::SYNC_PARTY_URL, [
             'Action' => $action,
@@ -209,20 +216,20 @@ class Exmail
             'access_token' => $this->token
         ]);
 
-        return json_decode($response, $isArray);
+        return json_decode($response);
     }
 
-    public function listParty($partyPath = null, $isArray = false)
+    public function listParty($partyPath = null)
     {
         $response = $this->sendRequest('POST', self::LIST_PARTY_URL, [
             'partypath' => $partyPath,
             'access_token' => $this->token
         ]);
 
-        return json_decode($response, $isArray);
+        return json_decode($response);
     }
 
-    public function addGroup($name, $email, $member = null, $isArray = false)
+    public function addGroup($name, $email, $member = null)
     {
         $response = $this->sendRequest('POST', self::ADD_GROUP_URL, [
             'group_name' => $name,
@@ -232,20 +239,20 @@ class Exmail
             'access_token' => $this->token
         ]);
 
-        return json_decode($response, $isArray);
+        return json_decode($response);
     }
 
-    public function delGroup($alias, $isArray = false)
+    public function delGroup($alias)
     {
         $response = $this->sendRequest('POST', self::DEL_GROUP_URL, [
             'group_alias' => $alias,
             'access_token' => $this->token
         ]);
 
-        return json_decode($response, $isArray);
+        return json_decode($response);
     }
 
-    public function addMember($alias, $email, $isArray = false)
+    public function addMember($alias, $email)
     {
         $response = $this->sendRequest('POST', self::ADD_MEMBER_URL, [
             'group_alias' => $alias,
@@ -253,10 +260,10 @@ class Exmail
             'access_token' => $this->token
         ]);
 
-        return json_decode($response, $isArray);
+        return json_decode($response);
     }
 
-    public function delMember($alias, $email, $isArray = false)
+    public function delMember($alias, $email)
     {
         $response = $this->sendRequest('POST', self::DEL_MEMBER_URL, [
             'group_alias' => $alias,
@@ -264,6 +271,6 @@ class Exmail
             'access_token' => $this->token
         ]);
 
-        return json_decode($response, $isArray);
+        return json_decode($response);
     }
 }

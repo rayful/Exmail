@@ -6,13 +6,13 @@
   "license": "mit",
   "authors": [
     {
-      "name": "hanson",
-      "email": "h@hanc.cc"
+      "name": "kingmax",
+      "email": "kingmaxyang@gmail.com"
     }
   ],
   "autoload": {
     "psr-4": {
-      "Hanccc\\": "src/"
+      "rayful\\": "src/"
     }
   }
 }
