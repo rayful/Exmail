@@ -1,5 +1,5 @@
 {
-  "name": "hanccc/exmail",
+  "name": "rayful/exmail",
   "require": {
     "guzzlehttp/guzzle": "^6.2"
   },
